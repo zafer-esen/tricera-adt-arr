@@ -1,5 +1,9 @@
 (set-logic HORN)
-
+(set-info :source |
+    Benchmark: C_VC
+    Output by Princess (http://www.philipp.ruemmer.org/princess.shtml)
+|)
+(set-info :status unsat)
 ;===============================================================================
 ; Encoding of Heap sorts and operations
 ;-------------------------------------------------------------------------------
@@ -15,6 +19,8 @@
 (define-fun defHeapObject    () HeapObject defObj)
 (define-fun valid     ((h Heap) (p Addr)) Bool
   (and (>= (HeapSize h) p) (> p 0)))
+(define-fun emptyHeap () Heap (
+  HeapCtor 0 (( as const (Array Addr HeapObject)) defHeapObject)))
 (define-fun read ((h Heap) (p Addr)) HeapObject
   (ite (valid h p)
        (select (HeapContents h) p)
@@ -27,10 +33,7 @@
   (AllocResHeap (HeapCtor (+ 1 (HeapSize h))
                     (store (HeapContents h) (+ 1 (HeapSize h)) o))
           (+ 1 (HeapSize h))))
-(define-fun Heap-eq     ((h1 Heap) (h2 Heap)) Bool
-  (forall ((p Addr))
-          (and (= (valid h1 p) (valid h2 p))
-               (= (read h1 p) (read h2 p)))))
+
 ;===============================================================================
 (declare-fun inv_main12 (Heap Int Addr Addr Addr) Bool)
 (declare-fun inv_main13 (Heap Int Addr Addr Addr) Bool)

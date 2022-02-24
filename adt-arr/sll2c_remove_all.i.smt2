@@ -19,17 +19,8 @@
 (define-fun defHeapObject    () HeapObject defObj)
 (define-fun valid     ((h Heap) (p Addr)) Bool
   (and (>= (HeapSize h) p) (> p 0)))
-;(declare-const allDefHeapObject (Array Addr HeapObject))
-;(define-fun allDefHeapObject () (Array Addr HeapObject)
-;)
-
-;(declare-const allDefHeapObject (Array Addr HeapObject))
-
 (define-fun emptyHeap () Heap (
-  HeapCtor 0 ((as const (Array Addr HeapObject)) defObj)))
-
-;(define-fun emptyHeap () Heap (HeapCtor 0 allDefHeapObject))
-
+  HeapCtor 0 (( as const (Array Addr HeapObject)) defHeapObject)))
 (define-fun read ((h Heap) (p Addr)) HeapObject
   (ite (valid h p)
        (select (HeapContents h) p)
@@ -42,10 +33,7 @@
   (AllocResHeap (HeapCtor (+ 1 (HeapSize h))
                     (store (HeapContents h) (+ 1 (HeapSize h)) o))
           (+ 1 (HeapSize h))))
-(define-fun Heap-eq     ((h1 Heap) (h2 Heap)) Bool
-  (forall ((p Addr))
-          (and (= (valid h1 p) (valid h2 p))
-               (= (read h1 p) (read h2 p)))))
+
 ;===============================================================================
 (declare-fun inv_main12 (Heap Int Int Int Int Int Addr) Bool)
 (declare-fun inv_main15 (Heap Int Int Int Int Int Addr Int) Bool)
