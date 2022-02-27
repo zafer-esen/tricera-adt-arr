@@ -18,15 +18,14 @@
                     ((HeapCtor (HeapSize Int)
                                (HeapContents (Array Addr HeapObject))))))
 (define-fun nullAddr  () Addr 0)
-(define-fun defHeapObject    () HeapObject defObj)
 (define-fun valid     ((h Heap) (p Addr)) Bool
   (and (>= (HeapSize h) p) (> p 0)))
 (define-fun emptyHeap () Heap (
-  HeapCtor 0 (( as const (Array Addr HeapObject)) defHeapObject)))
+  HeapCtor 0 (( as const (Array Addr HeapObject)) defObj)))
 (define-fun read ((h Heap) (p Addr)) HeapObject
   (ite (valid h p)
        (select (HeapContents h) p)
-       defHeapObject))
+       defObj))
 (define-fun write ((h Heap) (p Addr) (o HeapObject)) Heap
   (ite (valid h p)
        (HeapCtor (HeapSize h) (store (HeapContents h) p o))
