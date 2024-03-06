@@ -1,0 +1,28 @@
+(set-logic HORN)
+(set-info :source |
+    Benchmark: 
+    Output by Princess (http://www.philipp.ruemmer.org/princess.shtml)
+|)
+(declare-heap Heap Addr HeapObject
+ defObj
+ ((HeapObject 0)) (
+  (
+   (O_Int (getInt Int))
+   (O_UInt (getUInt Int))
+   (O_Addr (getAddr Addr))
+   (O_AddrRange (getAddrRange AddrRange))
+   (defObj)
+  )
+))
+(declare-fun _Glue0 (Heap Addr HeapObject) Bool)
+(declare-fun Inv_Heap_exp (Addr Int) Bool)
+(declare-fun inv_main (Heap Addr) Bool)
+(assert (forall ((var0 Int) (var1 Addr) (var2 HeapObject) (var3 Addr) (var4 Heap)) (not (and (inv_main var4 var3) (and (and (and (and (and (and (= defObj var2) (= (read var4 var3) var2)) (= nullAddr var1)) (= (getInt var2) var0)) (not (= var3 var1))) (not (<= 0 var0))) (not (valid var4 var3)))))))
+(assert (forall ((var0 HeapObject) (var1 Heap) (var2 Int) (var3 Addr)) (or (not (and (and (Inv_Heap_exp var3 var2) (inv_main var1 var3)) (and (and (= (O_Int var2) var0) (= (read var1 var3) var0)) (valid var1 var3)))) (_Glue0 var1 var3 var0))))
+(assert (forall ((var0 HeapObject) (var1 Addr) (var2 Heap)) (or (not (and (inv_main var2 var1) (and (= (read var2 var1) var0) (not (valid var2 var1))))) (_Glue0 var2 var1 var0))))
+(assert (forall ((var0 Int) (var1 HeapObject) (var2 Addr) (var3 Heap)) (or (not (and (_Glue0 var3 var2 var1) (and (and (= (getInt var1) (+ var0 1)) (<= 0 (+ var0 1))) (valid var3 var2)))) (Inv_Heap_exp var2 var0))))
+(assert (forall ((var0 Heap) (var1 HeapObject) (var2 Int) (var3 HeapObject) (var4 Addr) (var5 Heap)) (or (not (and (_Glue0 var5 var4 var3) (and (and (and (= (getInt var3) var2) (<= 0 var2)) (= (O_Int (+ var2 (- 1))) var1)) (= (write var5 var4 var1) var0)))) (inv_main var0 var4))))
+(assert (forall ((var0 AllocResHeap) (var1 Heap) (var2 HeapObject) (var3 Int)) (or (not (and (and (= (O_Int var3) var2) (= (alloc var1 var2) var0)) (= emptyHeap var1))) (Inv_Heap_exp (newAddr var0) var3))))
+(assert (forall ((var0 Int) (var1 Heap) (var2 HeapObject) (var3 Int) (var4 AllocResHeap) (var5 Addr) (var6 Heap)) (or (not (and (and (and (and (valid var6 var5) (= (AllocResHeap var6 var5) var4)) (= (O_Int var3) var2)) (= (alloc var1 var2) var4)) (= emptyHeap var1))) (Inv_Heap_exp var5 var0))))
+(assert (forall ((var0 Heap) (var1 HeapObject) (var2 Int) (var3 AllocResHeap) (var4 Heap) (var5 Addr) (var6 Heap) (var7 HeapObject) (var8 Int)) (or (not (and (and (and (and (and (= (O_Int var8) var7) (= (write var6 var5 var7) var4)) (= (AllocResHeap var6 var5) var3)) (= (O_Int var2) var1)) (= (alloc var0 var1) var3)) (= emptyHeap var0))) (inv_main var4 var5))))
+(check-sat)
